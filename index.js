@@ -15,6 +15,8 @@ function generateToken() {
    return token;
 }
 
+//signin endpoint
+
 app.post('/signin',function(req,res){
 
     const username=req.body.username;
@@ -35,6 +37,9 @@ app.post('/signin',function(req,res){
 
     
 })
+
+// singup endpoint
+
 app.post('/signup',function(req,res){
 
     const username=req.body.username;
@@ -66,6 +71,8 @@ app.post('/signup',function(req,res){
     }
 
 })
+
+// authenticated end point
 
 app.post('/me',function(req,res){
     const token=req.headers.token;

@@ -27,7 +27,7 @@ app.post('/signin',function(req,res){
 
     let user=users.find(user=>user.username===username&&user.password===password);
     if(user){
-        // const token=generateToken();
+        // const token=generateToken();   ==> custom token logic
         const token=jwt.sign({username:username},JWT_SECRET);
         user.token=token;
         res.json({

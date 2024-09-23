@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <style>
+        .signup-form{
+            
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 400px;
+            height: 300px;
+
+        }
+        .signin-form{
+            
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 400px;
+            height: 300px;
+
+        }
+        .logout-section{
+            display: flex;
+            justify-content: center;
+        }
+
+        .user-details{
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js"></script>
+    <script>
+        
+        async function singUp() {
+            const username=document.getElementById('signup-username').value;
+            const password=document.getElementById('signup-password').value;
+            const response=await axios.post('http://localhost:3000/signup',{
+                username:username,
+                password:password
+            });
+            const responseData=response.data;
+            // if(responseData.username){
+            //     document.getElementsByClassName('signup-form').setAttribute('style','display: none')
+            // }
+            alert(responseData.message)
+        } 
+        async function singIn() {
+            const username=document.getElementById('signin-username').value;
+            const password=document.getElementById('signin-password').value;
+            const response=await axios.post('http://localhost:3000/signin',{
+                username:username,
+                password:password
+            });
+            const responseData=response.data;
+            if(responseData.token){
+                localStorage.setItem('token',responseData.token);
+                alert(responseData.message)
+            }
+            else{
+                alert(responseData.message)
+            }
+        } 
+
+        async function userDetails(){
+            const token=localStorage.getItem('token');
+            const response=await axios.get('http://localhost:3000/userDetails',{
+                headers: {
+                Authorization: token
+            }
+            });
+            const responseData=response.data;
+            console.log('responseData',responseData);
+            const userdetails=document.getElementsByClassName("user-details")
+            const newDiv = document.createElement("div");
+            newDiv.innerHTML="username   :"+responseData.username+"  password   :"+responseData.password;
+            userdetails.appendChild(newDiv);
+        }
+        function logout(){
+            localStorage.removeItem("token");
+
+        }
+
+    </script>
+</head>
+<body>
+        <div class="signup-form">
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Username</label>
+                <input type="text" class="form-control" id="signup-username" aria-describedby="emailHelp">
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Password</label>
+                <input type="password" class="form-control" id="signup-password">
+              </div>
+              <button type="submit" class="btn btn-primary" onclick="singUp()">Sign-Up</button>
+        </div>
+        <div class="signin-form">
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label">Username</label>
+                <input type="text" class="form-control" id="signin-username" aria-describedby="emailHelp">
+              </div>
+              <div class="mb-3">
+                <label for="exampleInputPassword1" class="form-label">Password</label>
+                <input type="password" class="form-control" id="signin-password">
+              </div>
+              <button type="submit" class="btn btn-primary" onclick="singIn()">Sign-In</button>
+        </div>
+        <div class="logout-section">
+            <button type="submit" class="btn btn-primary" onclick="logout()">Logout</button>
+        </div>
+        <div class="user-details">User Details
+            <button type="submit" class="btn btn-primary" onclick="userDetails()">User Details</button>
+            
+        </div>
+</body>
+</html>
